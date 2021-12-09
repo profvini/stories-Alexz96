@@ -1,5 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <cstdlib>
 
 using namespace std;
 using namespace cv;
@@ -45,6 +46,70 @@ void transforma_imagem_negativa(String caminho_arquivo) {
 	cv::imwrite(diretorio_base_download + "negativa.jpg", imagem_negativa);
 }
 
+void clusteriza_imagem(String arquivo) {
+	// Define a quantidade de locais de mesclagem de dados
+	int numero_clusters = 8;
+	// Cria a matriz de rotulos
+	cv::Mat rotulos;
+	// Define quantas iteracoes o algoritmo K-Means realizara
+	int numero_rodadas = 5;
+	// Cria a matriz com os centros
+	cv::Mat centros;
+
+	cv::Mat imagem = imread(arquivo, IMREAD_COLOR);
+
+	// Cria a matriz com as amostras
+	cv:Mat amostras(
+		imagem.rows * imagem.cols,
+		3, 
+		CV_32F
+	);
+
+	// Itera sobre as linhas da matriz da imagem recebida por parametro
+	for (int i = 0; i < imagem.rows; i++)
+	{
+		// Itera as sobre colunas da matriz da imagem recebida por parametro
+		for (int j = 0; j < imagem.cols; j++)
+		{
+			// Itera em profundidade a matriz
+			for (int z = 0; z < 3; z++)
+			{
+				// Atualiza a matriz de amostras com as informacoes obtidas da imagem tridimensional
+				amostras.at<float>(i + j * imagem.rows, z) = imagem.at<Vec3b>(i, j)[z];
+			}
+		}
+	}
+
+	std::cout << "Executando K MEANS, aguarde..." << endl;
+
+	// Executa o algoritmo de K-Means com os parametros definidos
+	kmeans(amostras,
+		numero_clusters,
+		rotulos,
+		TermCriteria(TermCriteria::MAX_ITER| TermCriteria::EPS, 10000, 0.0001),
+		numero_rodadas,
+		KMEANS_PP_CENTERS,
+		centros);
+
+	// Cria a matriz da imagem clusterizada, com mesmo tipo e tamanho da imagem de entrada
+	Mat rotulada(imagem.size(), imagem.type());
+	// Itera sobre a matriz da imagem de entrada
+	for (int y = 0; y < imagem.rows; y++) {
+		for (int x = 0; x < imagem.cols; x++) {
+			int indice = rotulos.at<int>(y + x * imagem.rows, 0);
+			rotulada.at<Vec3b>(y, x)[0] = (uchar)centros.at<float>(indice, 0);
+			rotulada.at<Vec3b>(y, x)[1] = (uchar)centros.at<float>(indice, 1);
+			rotulada.at<Vec3b>(y, x)[2] = (uchar)centros.at<float>(indice, 2);
+		}
+	}
+
+	// Apresenta a imagem resultante
+	imshow("Clusterizada", rotulada);
+	// Salva no disco o resultado
+	cv::imwrite(diretorio_base_download + "clusterizada.jpg", rotulada);
+
+}
+
 int main() {
 	std::cout << "Iniciando projeto com OpenCV" << std::endl;
 	// Carrega a imagem a ser usada na aplicacao
@@ -65,6 +130,7 @@ int main() {
 	std::cout << "Digite \'c\' e pressione \'Enter\' para transformar a imagem em tons de cinza" << endl;
 	std::cout << "Digite \'n\' e pressione \'Enter\' para transformar a imagem em sua negativa" << endl;
 	std::cout << "Digite \'s\' e pressione \'Enter\' para sair do App" << endl;
+	std::cout << "Digite \'k\' e pressione \'Enter\' para transformar a imagem em \'salpicada\'" << endl;
 	std::cout << "Pressione qualquer outra tecla e \'Enter\' para apenas mostrar a imagem aberta" << endl;
 
 	std::cin >> opcao;
@@ -76,6 +142,9 @@ int main() {
 		break;
 	case 'n':
 		transforma_imagem_negativa(nome_arquivo);
+		break;
+	case 'k':
+		clusteriza_imagem(nome_arquivo);
 		break;
 	case 's':
 		break;
