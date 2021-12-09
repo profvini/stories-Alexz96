@@ -6,6 +6,7 @@ using namespace cv;
 
 char opcao;
 String nome_arquivo = "assets\\imagens_exemplo\\microsoft.jpg";
+String diretorio_base_download = "assets\\imagens_resultado\\";
 
 cv::Mat imagem_original;
 
@@ -16,6 +17,7 @@ void transforma_imagem_cinza(cv::Mat imagem_para_conversao) {
 	cv::cvtColor(imagem_para_conversao, imagem_cinza, COLOR_BGR2GRAY);
 	// Apresenta a imagem convertida
 	cv::imshow("Tons cinza", imagem_cinza);
+	cv::imwrite(diretorio_base_download + "cinza.jpg", imagem_cinza);
 }
 
 int main() {
