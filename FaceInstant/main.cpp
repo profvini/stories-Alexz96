@@ -1,9 +1,13 @@
 #include <iostream>
-#include <opencv2/opencv.hpp>
 #include <cstdlib>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 using namespace std;
 using namespace cv;
+
+#define DIRETORIO_FONTE = "assets\\fonte\\"
 
 char opcao;
 String nome_arquivo = "assets\\imagens_exemplo\\microsoft.jpg";
@@ -123,6 +127,33 @@ void ajusta_claridade_imagem(cv::Mat imagem_para_ajuste) {
 	cv::imwrite(diretorio_base_download + "clarificada.jpg", imagem_ajustada);
 }
 
+void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
+	// Define o texto para mostrar na imagem
+	String texto_para_incluir = "09/12/2021 - 08:13";
+
+	// Apresenta o tamanho da imagem
+	std:cout << "Tamanho da imagem: " << imagem_colocar_texto.size << std::endl;
+
+	// Calcula a posicao do texto na imagem recebida - fica na parte superior
+	int um_nono_altura_imagem = imagem_colocar_texto.cols / 10;
+	int um_nono_largura_imagem = imagem_colocar_texto.rows / 10;
+	
+	// Inclui o texto na imagem com as configuracoes predeterminadas
+	cv::putText(
+		imagem_colocar_texto,
+		texto_para_incluir,
+		cv::Point(um_nono_largura_imagem, um_nono_altura_imagem),
+		FONT_HERSHEY_SIMPLEX,
+		1.0,
+		Scalar(0, 0, 250)
+	);
+
+	// Apresenta a imagem com o texto inserido
+	cv::imshow("Imagem com texto", imagem_colocar_texto);
+	// Salva a imagem com o texto inserido em disco
+	cv::imwrite(diretorio_base_download + "imagem_com_texto.jpg", imagem_colocar_texto);
+}
+
 int main() {
 	std::cout << "Iniciando projeto com OpenCV" << std::endl;
 	// Carrega a imagem a ser usada na aplicacao
@@ -144,6 +175,7 @@ int main() {
 	std::cout << "Digite \'n\' e pressione \'Enter\' para transformar a imagem em sua negativa" << endl;
 	std::cout << "Digite \'k\' e pressione \'Enter\' para transformar a imagem com base nas cores similares identificadas" << endl;
 	std::cout << "Digite \'b\' e pressione \'Enter\' para ajustar a claridade da imagem" << endl;
+	std::cout << "Digite \'f\' e pressione \'Enter\' para incluir texto na imagem" << endl;
 	std::cout << "Digite \'s\' e pressione \'Enter\' para sair do App" << endl;
 	std::cout << "Pressione qualquer outra tecla e \'Enter\' para apenas mostrar a imagem aberta" << endl;
 
@@ -162,6 +194,9 @@ int main() {
 		break;
 	case 'b':
 		ajusta_claridade_imagem(imagem_original);
+		break;
+	case 'f':
+		insere_marca_tempo(imagem_original);
 		break;
 	case 's':
 		break;
