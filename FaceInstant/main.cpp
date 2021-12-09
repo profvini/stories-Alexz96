@@ -87,7 +87,7 @@ void clusteriza_imagem(String arquivo) {
 	std::cout << "Executando K MEANS, aguarde..." << endl;
 
 	// Executa o algoritmo de K-Means com os parametros definidos
-	kmeans(amostras,
+	cv::kmeans(amostras,
 		numero_clusters,
 		rotulos,
 		TermCriteria(TermCriteria::MAX_ITER| TermCriteria::EPS, 10000, 0.0001),

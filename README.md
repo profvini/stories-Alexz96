@@ -7,15 +7,19 @@ O App em questão utiliza principalmente a biblioteca OpenCV (na versão 4.5.3) 
 
 ## Como executar
 
-  A solução foi desenvolvida utilizando-se o Visual Studio Community 2019, portanto recomenda-se o uso do mesmo para compilação e execução. 
+  A solução foi desenvolvida utilizando o Visual Studio Community 2019, portanto recomenda-se o uso do mesmo para compilação e execução. 
   Dito isso, seguem os passos:
 
 - Clonar o repositório;
 - Abrir o Visual Studio;
 - Clicar em "Abrir um projeto ou uma solução";
-- Navegar até a pasta baixada do repositório;
+- Navegar até "FaceInstant" na pasta baixada do repositório;
 - Clicar duas vezes sobre o arquivo com a extensão .sln;
 - Selecionar na barra superior as opções "Debug" e "x64";
 - Pressionar F5;
 
 Como alternativa, pode-se clicar em "Clonar um repositório" logo após abrir o Visual Studio.
+
+## Bibliotecas utilizadas
+
+- OpenCV (v4.5.3);
