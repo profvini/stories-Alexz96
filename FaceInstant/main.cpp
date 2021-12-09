@@ -12,6 +12,7 @@ using namespace cv;
 char opcao;
 String nome_arquivo = "assets\\imagens_exemplo\\microsoft.jpg";
 String diretorio_base_download = "assets\\imagens_resultado\\";
+String diretorio_figurinhas = "assets\\figurinhas\\";
 
 cv::Mat imagem_original;
 
@@ -143,15 +144,30 @@ void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
 		imagem_colocar_texto,
 		texto_para_incluir,
 		cv::Point(um_nono_largura_imagem, um_nono_altura_imagem),
-		FONT_HERSHEY_SIMPLEX,
+		FONT_HERSHEY_DUPLEX,
 		1.0,
-		Scalar(0, 0, 250)
+		Scalar(250, 250, 250)
 	);
 
 	// Apresenta a imagem com o texto inserido
 	cv::imshow("Imagem com texto", imagem_colocar_texto);
 	// Salva a imagem com o texto inserido em disco
 	cv::imwrite(diretorio_base_download + "imagem_com_texto.jpg", imagem_colocar_texto);
+}
+
+void insere_figurinha_imagem(cv::Mat imagem_incluir_figurinha) {
+	String nome_figurinha = "pizza.png"; // Opcoes - pizza, jake ou come - todas .png
+	int	cx = imagem_incluir_figurinha.cols - 70;
+
+	cv::Mat figurinha = cv::imread(diretorio_figurinhas + nome_figurinha, -1);
+	cv::Mat imagem_resultado;
+
+	cv::addWeighted(imagem_incluir_figurinha, 0.5, figurinha, 1.0 - 0.5, 0.0, imagem_resultado); // Da erro
+	//figurinha.copyTo(imagem_incluir_figurinha);
+
+	cv::imshow("Imagem com figurinha", imagem_resultado);
+
+	cv::imwrite(diretorio_base_download + "figurinha.jpg", imagem_resultado);
 }
 
 int main() {
@@ -175,7 +191,8 @@ int main() {
 	std::cout << "Digite \'n\' e pressione \'Enter\' para transformar a imagem em sua negativa" << endl;
 	std::cout << "Digite \'k\' e pressione \'Enter\' para transformar a imagem com base nas cores similares identificadas" << endl;
 	std::cout << "Digite \'b\' e pressione \'Enter\' para ajustar a claridade da imagem" << endl;
-	std::cout << "Digite \'f\' e pressione \'Enter\' para incluir texto na imagem" << endl;
+	std::cout << "Digite \'t\' e pressione \'Enter\' para incluir texto na imagem" << endl;
+	std::cout << "Digite \'f\' e pressione \'Enter\' para inserir uma figurinha na imagem" << endl;
 	std::cout << "Digite \'s\' e pressione \'Enter\' para sair do App" << endl;
 	std::cout << "Pressione qualquer outra tecla e \'Enter\' para apenas mostrar a imagem aberta" << endl;
 
@@ -195,8 +212,11 @@ int main() {
 	case 'b':
 		ajusta_claridade_imagem(imagem_original);
 		break;
-	case 'f':
+	case 't':
 		insere_marca_tempo(imagem_original);
+		break;
+	case 'f':
+		insere_figurinha_imagem(imagem_original);
 		break;
 	case 's':
 		break;
