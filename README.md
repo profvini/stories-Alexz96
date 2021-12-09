@@ -15,5 +15,7 @@ O App em questão utiliza principalmente a biblioteca OpenCV (na versão 4.5.3) 
 - Clicar em "Abrir um projeto ou uma solução";
 - Navegar até a pasta baixada do repositório;
 - Clicar duas vezes sobre o arquivo com a extensão .sln;
+- Selecionar na barra superior as opções "Debug" e "x64";
+- Pressionar F5;
 
 Como alternativa, pode-se clicar em "Clonar um repositório" logo após abrir o Visual Studio.
