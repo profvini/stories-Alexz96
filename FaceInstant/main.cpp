@@ -110,6 +110,19 @@ void clusteriza_imagem(String arquivo) {
 
 }
 
+void ajusta_claridade_imagem(cv::Mat imagem_para_ajuste) {
+	// Cria a matriz para receber a imagem com os ajustes de claridade
+	cv::Mat imagem_ajustada;
+
+	// Ajusta a claridade da imagem em 60
+	cv::convertScaleAbs(imagem_para_ajuste, imagem_ajustada, 1.0, 60);
+
+	// Mostra a imagem ajustada
+	cv::imshow("Clarificada", imagem_ajustada);
+	// Salva em disco a imagem ajustada, no diretorio configurado
+	cv::imwrite(diretorio_base_download + "clarificada.jpg", imagem_ajustada);
+}
+
 int main() {
 	std::cout << "Iniciando projeto com OpenCV" << std::endl;
 	// Carrega a imagem a ser usada na aplicacao
@@ -129,8 +142,9 @@ int main() {
 	std::cout << "Selecione o que deseja realizar com a imagem" << endl;
 	std::cout << "Digite \'c\' e pressione \'Enter\' para transformar a imagem em tons de cinza" << endl;
 	std::cout << "Digite \'n\' e pressione \'Enter\' para transformar a imagem em sua negativa" << endl;
+	std::cout << "Digite \'k\' e pressione \'Enter\' para transformar a imagem com base nas cores similares identificadas" << endl;
+	std::cout << "Digite \'b\' e pressione \'Enter\' para ajustar a claridade da imagem" << endl;
 	std::cout << "Digite \'s\' e pressione \'Enter\' para sair do App" << endl;
-	std::cout << "Digite \'k\' e pressione \'Enter\' para transformar a imagem em \'salpicada\'" << endl;
 	std::cout << "Pressione qualquer outra tecla e \'Enter\' para apenas mostrar a imagem aberta" << endl;
 
 	std::cin >> opcao;
@@ -145,6 +159,9 @@ int main() {
 		break;
 	case 'k':
 		clusteriza_imagem(nome_arquivo);
+		break;
+	case 'b':
+		ajusta_claridade_imagem(imagem_original);
 		break;
 	case 's':
 		break;
