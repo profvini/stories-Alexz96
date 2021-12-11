@@ -3,8 +3,15 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
+#include "opencv2/imgcodecs.hpp"
 
-using namespace std;
+// Desabilita erros de compilacao em funcao do 'sprintf'
+#pragma warning(disable : 4996)
+
+//using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 using namespace cv;
 
 #define DIRETORIO_FONTE = "assets\\fonte\\"
@@ -13,6 +20,11 @@ char opcao;
 String nome_arquivo = "assets\\imagens_exemplo\\microsoft.jpg";
 String diretorio_base_download = "assets\\imagens_resultado\\";
 String diretorio_figurinhas = "assets\\figurinhas\\";
+
+struct Parametros {
+	cv::Mat* src;
+	cv::Mat* dest;
+};
 
 cv::Mat imagem_original;
 
@@ -115,17 +127,22 @@ void clusteriza_imagem(String arquivo) {
 
 }
 
-void ajusta_claridade_imagem(cv::Mat imagem_para_ajuste) {
-	// Cria a matriz para receber a imagem com os ajustes de claridade
-	cv::Mat imagem_ajustada;
-
-	// Ajusta a claridade da imagem em 60
-	cv::convertScaleAbs(imagem_para_ajuste, imagem_ajustada, 1.0, 60);
-
-	// Mostra a imagem ajustada
-	cv::imshow("Clarificada", imagem_ajustada);
-	// Salva em disco a imagem ajustada, no diretorio configurado
-	cv::imwrite(diretorio_base_download + "clarificada.jpg", imagem_ajustada);
+void ajusta_claridade_imagem(int pos, void* dados) {
+	Parametros* params = (Parametros*)dados;
+	for (int i = 0; i < params->src->rows; i++) {
+		for (int j = 0; j < params->src->cols; j++) {
+			Vec3b pixelColor;
+			pixelColor = params->src->at<Vec3b>(Point(j, i));
+			for (int k = 0; k < 3; k++) {
+				if (pixelColor[k] + pos > 255)
+					pixelColor[k] = 255;
+				else
+					pixelColor[k] += pos;
+				params->dest->at<Vec3b>(Point(j, i)) = pixelColor;
+			}
+		}
+	}
+	imshow("Imagem Clara", *(params->dest));
 }
 
 void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
@@ -180,19 +197,18 @@ int main() {
 		exit(1);
 	}
 
-	//while (opcao != 's')
-	//{
-	//	std::cin >> opcao;
-	//}
+	// Cria a matriz que recebera a imagem ajustada
+	cv::Mat imagem_ajustada;
 
-	// TODO: Colocar em um while as funcoes
-	// TODO 2: Criar Slider no ajuste de claridade
-	// TODO 3: Colocar o texto dinamico e posicionar pelo Slider
-	// TODO 4: Colocar a figurinha com sucesso
-	// TODO 5: Pegar um video
-	// TODO 6: Ajustar README
-	// TODO BONUS 1: Criar filtro Sepia
-	// TODO BONUS 2: Tentar efeito do VCR
+	// Valor inicial para a claridade
+	int valor_claridade = 50;
+	// Valor maximo do pixel com o aumento da claridade
+	int claridade_maxima = 255;
+
+	// Inicializa a struct
+	Parametros p;
+	p.src = &imagem_original;
+	p.dest = &imagem_ajustada;
 
 	std::cout << "Selecione o que deseja realizar com a imagem" << endl;
 	std::cout << "Digite \'c\' e pressione \'Enter\' para transformar a imagem em tons de cinza" << endl;
@@ -218,7 +234,17 @@ int main() {
 		clusteriza_imagem(nome_arquivo);
 		break;
 	case 'b':
-		ajusta_claridade_imagem(imagem_original);
+		// Copia imagem base para a imagem a ser ajustada
+		imagem_original.copyTo(imagem_ajustada);
+		// Cria uma janela para inserir a TrackBar
+		cv::namedWindow("Clarificada");
+
+		// Cria a Trackbar
+		cv::createTrackbar("Claridade", "Clarificada", &valor_claridade, claridade_maxima, ajusta_claridade_imagem, &p);
+		ajusta_claridade_imagem(valor_claridade, &p);
+
+		// Salva em disco a imagem ajustada, no diretorio configurado
+		cv::imwrite(diretorio_base_download + "clarificada.jpg", imagem_ajustada);
 		break;
 	case 't':
 		insere_marca_tempo(imagem_original);
