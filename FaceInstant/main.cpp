@@ -157,17 +157,16 @@ void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
 
 void insere_figurinha_imagem(cv::Mat imagem_incluir_figurinha) {
 	String nome_figurinha = "pizza.png"; // Opcoes - pizza, jake ou come - todas .png
-	int	cx = imagem_incluir_figurinha.cols - 70;
+	int posicao_x = 5;
+	int posicao_y = 5;
 
-	cv::Mat figurinha = cv::imread(diretorio_figurinhas + nome_figurinha, -1);
-	cv::Mat imagem_resultado;
+	cv::Mat figurinha = cv::imread(diretorio_figurinhas + nome_figurinha);
 
-	cv::addWeighted(imagem_incluir_figurinha, 0.5, figurinha, 1.0 - 0.5, 0.0, imagem_resultado); // Da erro
-	//figurinha.copyTo(imagem_incluir_figurinha);
+	figurinha.copyTo(imagem_incluir_figurinha(cv::Rect(posicao_x,posicao_y, figurinha.cols, figurinha.rows)));
 
-	cv::imshow("Imagem com figurinha", imagem_resultado);
+	cv::imshow("Imagem com figurinha", imagem_incluir_figurinha);
 
-	cv::imwrite(diretorio_base_download + "figurinha.jpg", imagem_resultado);
+	cv::imwrite(diretorio_base_download + "figurinha.jpg", imagem_incluir_figurinha);
 }
 
 int main() {
@@ -185,6 +184,15 @@ int main() {
 	//{
 	//	std::cin >> opcao;
 	//}
+
+	// TODO: Colocar em um while as funcoes
+	// TODO 2: Criar Slider no ajuste de claridade
+	// TODO 3: Colocar o texto dinamico e posicionar pelo Slider
+	// TODO 4: Colocar a figurinha com sucesso
+	// TODO 5: Pegar um video
+	// TODO 6: Ajustar README
+	// TODO BONUS 1: Criar filtro Sepia
+	// TODO BONUS 2: Tentar efeito do VCR
 
 	std::cout << "Selecione o que deseja realizar com a imagem" << endl;
 	std::cout << "Digite \'c\' e pressione \'Enter\' para transformar a imagem em tons de cinza" << endl;
