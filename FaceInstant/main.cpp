@@ -147,7 +147,11 @@ void ajusta_claridade_imagem(int pos, void* dados) {
 
 void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
 	// Define o texto para mostrar na imagem
-	String texto_para_incluir = "09/12/2021 - 08:13";
+	String texto_para_incluir = "";
+
+	std::cout << "Digite o texto que deseja inserir na imagem: " << std::endl;
+	std::cin >> texto_para_incluir;
+	std::getline(std::cin, texto_para_incluir);
 
 	// Apresenta o tamanho da imagem
 	std:cout << "Tamanho da imagem: " << imagem_colocar_texto.size << std::endl;
@@ -161,7 +165,7 @@ void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
 		imagem_colocar_texto,
 		texto_para_incluir,
 		cv::Point(um_nono_largura_imagem, um_nono_altura_imagem),
-		FONT_HERSHEY_DUPLEX,
+		FONT_HERSHEY_SIMPLEX,
 		1.0,
 		Scalar(250, 250, 250)
 	);

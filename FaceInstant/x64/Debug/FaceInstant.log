@@ -1,4 +1,4 @@
 ﻿  main.cpp
 C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(79,4): warning C4102: 'cv': rótulo não referenciado
-C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(153,5): warning C4102: 'std': rótulo não referenciado
+C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(157,5): warning C4102: 'std': rótulo não referenciado
   FaceInstant.vcxproj -> C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\x64\Debug\FaceInstant.exe
