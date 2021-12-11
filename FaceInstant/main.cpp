@@ -21,6 +21,11 @@ String nome_arquivo = "assets\\imagens_exemplo\\microsoft.jpg";
 String diretorio_base_download = "assets\\imagens_resultado\\";
 String diretorio_figurinhas = "assets\\figurinhas\\";
 
+// Variaveis para captura de video
+cv::VideoCapture cap;
+int altura, largura;
+int key;
+
 struct Parametros {
 	cv::Mat* src;
 	cv::Mat* dest;
@@ -190,6 +195,36 @@ void insere_figurinha_imagem(cv::Mat imagem_incluir_figurinha) {
 	cv::imwrite(diretorio_base_download + "figurinha.jpg", imagem_incluir_figurinha);
 }
 
+int abre_webcam() {
+	cv::Mat frames;
+	cap.open(0);
+
+	// Valida se foi localizada uma câmera
+	if (!cap.isOpened()) {
+		std::cout << "cameras indisponiveis";
+		exit(-1);
+	}
+
+	// Define a largura e altura da tela, respectivamente
+	cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+	cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+	
+	// Enquanto roda a funcao...
+	while (1) {
+		// fica salvando cada frame para a matriz de frame
+		cap >> frames;
+
+		// Apresenta video capturado
+		cv::imshow("Video", frames);
+		
+		// Monitora digitacao
+		key = cv::waitKey(30);
+		// Se pressionado 'Esc' encerra
+		if (key == 27) break;
+	}
+
+}
+
 int main() {
 	std::cout << "Iniciando projeto com OpenCV" << std::endl;
 	// Carrega a imagem a ser usada na aplicacao
@@ -255,6 +290,9 @@ int main() {
 		break;
 	case 'f':
 		insere_figurinha_imagem(imagem_original);
+		break;
+	case 'v':
+		abre_webcam();
 		break;
 	case 's':
 		break;
