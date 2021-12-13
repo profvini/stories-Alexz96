@@ -25,6 +25,8 @@ String diretorio_figurinhas = "assets\\figurinhas\\";
 cv::VideoCapture cap;
 int altura, largura;
 int key;
+float gauss[] = { 0.0625, 0.125,  0.0625, 0.125, 0.25,
+				   0.125,  0.0625, 0.125,  0.0625 };
 
 struct Parametros {
 	cv::Mat* src;
@@ -197,6 +199,14 @@ void insere_figurinha_imagem(cv::Mat imagem_incluir_figurinha) {
 
 int abre_webcam() {
 	cv::Mat frames;
+
+	cv::Mat frame, framegray, frame32f, frameFiltered;
+	cv::Mat mask(3, 3, CV_32F);
+	cv::Mat result;
+
+	// habilita o negativo da imagem
+	bool negative = false;
+
 	cap.open(0);
 
 	// Valida se foi localizada uma câmera
@@ -208,6 +218,9 @@ int abre_webcam() {
 	// Define a largura e altura da tela, respectivamente
 	cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
 	cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+
+	// 
+	cv::namedWindow("Video", cv::WINDOW_NORMAL);
 	
 	// Enquanto roda a funcao...
 	while (1) {
@@ -219,8 +232,17 @@ int abre_webcam() {
 		
 		// Monitora digitacao
 		key = cv::waitKey(30);
-		// Se pressionado 'Esc' encerra
-		if (key == 27) break;
+		if (key == 27) break;  // esc pressed!
+		switch (key) {
+			case 'n':
+				negative = true;
+				bitwise_not(frames, frameFiltered);
+				cv::imshow("Video Negativo", frameFiltered);
+				cv::imwrite(diretorio_base_download + "v_negativo.jpg", frameFiltered);
+				break;
+			default:
+				break;
+		}
 	}
 
 }
@@ -256,6 +278,7 @@ int main() {
 	std::cout << "Digite \'b\' e pressione \'Enter\' para ajustar a claridade da imagem" << endl;
 	std::cout << "Digite \'t\' e pressione \'Enter\' para incluir texto na imagem" << endl;
 	std::cout << "Digite \'f\' e pressione \'Enter\' para inserir uma figurinha na imagem" << endl;
+	std::cout << "Digite \'v\' e pressione \'Enter\' para capturar um video" << endl;
 	std::cout << "Digite \'s\' e pressione \'Enter\' para sair do App" << endl;
 	std::cout << "Pressione qualquer outra tecla e \'Enter\' para apenas mostrar a imagem aberta" << endl;
 

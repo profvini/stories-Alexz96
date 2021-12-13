@@ -1,5 +1,5 @@
 ﻿  main.cpp
-C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(84,4): warning C4102: 'cv': rótulo não referenciado
-C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(162,5): warning C4102: 'std': rótulo não referenciado
-C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(227): warning C4715: 'abre_webcam': nem todos os caminhos de controle retornam um valor
+C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(86,4): warning C4102: 'cv': rótulo não referenciado
+C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(164,5): warning C4102: 'std': rótulo não referenciado
+C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\main.cpp(248): warning C4715: 'abre_webcam': nem todos os caminhos de controle retornam um valor
   FaceInstant.vcxproj -> C:\Users\alexs\Downloads\stories-Alexz96\FaceInstant\x64\Debug\FaceInstant.exe
