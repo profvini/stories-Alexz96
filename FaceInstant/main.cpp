@@ -283,8 +283,8 @@ int main() {
 	std::cout << "Pressione qualquer outra tecla e \'Enter\' para apenas mostrar a imagem aberta" << endl;
 
 	std::cin >> opcao;
-
-	switch (opcao)
+	
+	switch (tolower(opcao))
 	{
 	case 'c':
 		transforma_imagem_cinza(imagem_original);
