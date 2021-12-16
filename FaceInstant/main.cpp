@@ -36,6 +36,8 @@ struct Parametros {
 cv::Mat imagem_original;
 
 void transforma_imagem_cinza(cv::Mat imagem_para_conversao) {
+	// Mostra a imagem importada
+	cv::imshow("Imagem Original", imagem_para_conversao);
 	// Cria matriz para recepcao da imagem convertida em tons de cinza
 	cv::Mat imagem_cinza;
 	// Realiza a conversao das cores dos pixeis pra cinza
@@ -47,6 +49,9 @@ void transforma_imagem_cinza(cv::Mat imagem_para_conversao) {
 }
 
 void transforma_imagem_negativa(String caminho_arquivo) {
+	// Mostra a imagem importada
+	cv::imshow("Imagem Original", cv::imread(caminho_arquivo, IMREAD_COLOR));
+
 	// Prepara matriz para receber a imagem
 	cv::Mat imagem_negativa;
 
@@ -81,6 +86,7 @@ void clusteriza_imagem(String arquivo) {
 	cv::Mat centros;
 
 	cv::Mat imagem = imread(arquivo, IMREAD_COLOR);
+	cv::imshow("Original", imagem);
 
 	// Cria a matriz com as amostras
 	cv:Mat amostras(
@@ -134,21 +140,29 @@ void clusteriza_imagem(String arquivo) {
 
 }
 
+// Principal tecnica neste metodo, eh a de clarificar o pixel com o tom maximo, ou branco (255)
 void ajusta_claridade_imagem(int pos, void* dados) {
+	// Inicializa a struct de parametros, contendo imagem entrada e destino
 	Parametros* params = (Parametros*)dados;
+	// Itera sobre as linhas e colunas da matriz
 	for (int i = 0; i < params->src->rows; i++) {
 		for (int j = 0; j < params->src->cols; j++) {
+			// Inicializa um vetor tridimensional
 			Vec3b pixelColor;
+			// Identifica as cores do pixel de cada Ponto na imagem, com coordenas (y, x)
 			pixelColor = params->src->at<Vec3b>(Point(j, i));
+			// Itera sobre os pixeis com as cores da imagem
 			for (int k = 0; k < 3; k++) {
+				// Valida a posição do slider para ajustar a claridade do pixel nos pontos determinados
 				if (pixelColor[k] + pos > 255)
 					pixelColor[k] = 255;
 				else
 					pixelColor[k] += pos;
-				params->dest->at<Vec3b>(Point(j, i)) = pixelColor;
+				params->dest->at<Vec3b>(Point(j, i)) = pixelColor; // Atribui a cor do pixel em cada ponto da imagem
 			}
 		}
 	}
+	// Apresenta a imagem
 	imshow("Imagem Clara", *(params->dest));
 }
 
@@ -166,6 +180,9 @@ void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
 	// Calcula a posicao do texto na imagem recebida - fica na parte superior
 	int um_nono_altura_imagem = imagem_colocar_texto.cols / 10;
 	int um_nono_largura_imagem = imagem_colocar_texto.rows / 10;
+
+	// Mostra imagem original
+	cv::imshow("Original", imagem_colocar_texto);
 	
 	// Inclui o texto na imagem com as configuracoes predeterminadas
 	cv::putText(
@@ -176,7 +193,6 @@ void insere_marca_tempo(cv::Mat imagem_colocar_texto) {
 		1.0,
 		Scalar(250, 250, 250)
 	);
-
 	// Apresenta a imagem com o texto inserido
 	cv::imshow("Imagem com texto", imagem_colocar_texto);
 	// Salva a imagem com o texto inserido em disco
@@ -299,10 +315,10 @@ int main() {
 		// Copia imagem base para a imagem a ser ajustada
 		imagem_original.copyTo(imagem_ajustada);
 		// Cria uma janela para inserir a TrackBar
-		cv::namedWindow("Clarificada");
+		cv::namedWindow("Imagem Clara");
 
 		// Cria a Trackbar
-		cv::createTrackbar("Claridade", "Clarificada", &valor_claridade, claridade_maxima, ajusta_claridade_imagem, &p);
+		cv::createTrackbar("Claridade", "Imagem Clara", &valor_claridade, claridade_maxima, ajusta_claridade_imagem, &p);
 		ajusta_claridade_imagem(valor_claridade, &p);
 
 		// Salva em disco a imagem ajustada, no diretorio configurado
