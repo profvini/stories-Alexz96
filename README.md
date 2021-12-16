@@ -19,6 +19,7 @@ O App em questão utiliza principalmente a biblioteca OpenCV (na versão 4.5.3) 
 - Pressionar `F5`;
 
 Como alternativa, pode-se clicar em "Clonar um repositório" logo após abrir o Visual Studio.
+Ainda, como outra alternativa, pode-se clicar à direita (em Releases) sobre o link v0.2.0 e baixar um arquivo compactado com a solução desenvolvida.
 
 ## Executando
 
